@@ -49,7 +49,7 @@ default: all
 # MUON_CC_OPTS ?= -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles
 # RISCV_OBJDUMP ?= $(RISCV_PREFIX)objdump --disassemble-all --disassemble-zeroes --section=.text --section=.text.startup --section=.text.init --section=.data
 # RISCV_SIM ?= spike
-MUON_INSTALL ?= /scratch/yrh/radiance-kernels/llvm/llvm-muon/bin
+MUON_INSTALL ?= $(realpath ../../llvm/llvm-muon/bin)
 MUON_CC ?= $(MUON_INSTALL)/clang
 MUON_CC_OPTS ?= -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles --gcc-toolchain=$(RISCV_TOOLCHAIN_PATH)
 MUON_CC_OPTS += -Xclang -target-feature -Xclang +vortex -mllvm -inline-threshold=262144 -fuse-ld=lld
