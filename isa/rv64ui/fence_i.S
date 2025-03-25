@@ -16,11 +16,15 @@ RVTEST_CODE_BEGIN
 li a3, 111
 lh a0, insn
 lh a1, insn+2
+lh a9, insn+4
+lh a10, insn+6
 
 # test I$ hit
 .align 6
 sh a0, 2f, t0
 sh a1, 2f+2, t0
+sh a9, 2f+4, t0
+sh a10, 2f+6, t0
 fence.i
 
 la a5, 2f
@@ -34,6 +38,8 @@ bnez a4, 1b
 
 sh a0, 3f, t0
 sh a1, 3f+2, t0
+sh a9, 3f+4, t0
+sh a10, 3f+6, t0
 fence.i
 
 .align 6

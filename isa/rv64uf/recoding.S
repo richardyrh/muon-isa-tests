@@ -13,12 +13,18 @@
 #include "riscv_test.h"
 #include "test_macros.h"
 
+#define f0 a20
+#define f1 a21
+#define flw lw
+
 RVTEST_RV64UF
 RVTEST_CODE_BEGIN
 
   # Make sure infinities with different mantissas compare as equal.
-  flw f0, minf, a0
-  flw f1, three, a0
+  la a0, minf
+  flw f0, 0(a0)
+  la a0, three
+  flw f1, 0(a0)
   fmul.s f1, f1, f0
   TEST_CASE( 2, a0, 1, feq.s a0, f0, f1)
   TEST_CASE( 3, a0, 1, fle.s a0, f0, f1)

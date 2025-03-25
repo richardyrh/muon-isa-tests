@@ -64,7 +64,7 @@ target_3:
   TEST_CASE( 7, t0, 4, \
     li  t0, 1; \
     la  t1, 1f; \
-    jr  t1, -4; \
+    jr  t1, -8; \
     addi t0, t0, 1; \
     addi t0, t0, 1; \
     addi t0, t0, 1; \

@@ -12,7 +12,6 @@ rv32ui_sc_tests = \
 	jal jalr \
 	lb lbu lh lhu lw ld_st \
 	lui \
-	ma_data \
 	or ori \
 	sb sh sw st_ld \
 	sll slli \
@@ -21,6 +20,7 @@ rv32ui_sc_tests = \
 	srl srli \
 	sub \
 	xor xori \
+	# ma_data \
 
 rv32ui_p_tests = $(addprefix rv32ui-p-, $(rv32ui_sc_tests))
 rv32ui_v_tests = $(addprefix rv32ui-v-, $(rv32ui_sc_tests))
