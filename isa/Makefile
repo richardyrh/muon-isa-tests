@@ -37,6 +37,7 @@ include $(src_dir)/rv32uf/Makefrag
 # include $(src_dir)/rv32uzbs/Makefrag
 # include $(src_dir)/rv32si/Makefrag
 # include $(src_dir)/rv32mi/Makefrag
+include $(src_dir)/vx32/Makefrag
 
 default: all
 
@@ -100,6 +101,7 @@ $(eval $(call compile_template,rv32uf,-march=rv32im_zfinx -mabi=ilp32))
 # $(eval $(call compile_template,rv32uzbs,-march=rv32g_zbs -mabi=ilp32))
 # $(eval $(call compile_template,rv32si,-march=rv32g -mabi=ilp32))
 # $(eval $(call compile_template,rv32mi,-march=rv32g -mabi=ilp32))
+$(eval $(call compile_template,vx32,-march=rv32im_zfinx -mabi=ilp32))
 $(info tests="$(tests)")
 ifeq ($(XLEN),64)
 $(eval $(call compile_template,rv64ui,-march=rv64g -mabi=lp64))
