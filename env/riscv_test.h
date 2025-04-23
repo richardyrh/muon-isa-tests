@@ -317,9 +317,8 @@ reset_vector:                                                           \
 #define RVTEST_PASS                                                     \
         fence;                                                          \
         li TESTNUM, 1;                                                  \
-        li a7, 93;                                                      \
         li a0, 0;                                                       \
-        .insn r 115, 0, 0, x0, a0, a7;                                  \
+        tohost a0;                                                      \
         nop;                                                            \
         nop;
 
@@ -329,9 +328,9 @@ reset_vector:                                                           \
 1:      beqz TESTNUM, 1b;                                               \
         sll TESTNUM, TESTNUM, 1;                                        \
         or TESTNUM, TESTNUM, 1;                                         \
-        li a7, 93;                                                      \
         addi a0, TESTNUM, 0;                                            \
-        .insn r 115, 0, 0, x0, a0, a7;
+        tohost a0;                                                      
+        // .insn r 115, 0, 0, x0, a0, a7;
 
 //-----------------------------------------------------------------------
 // Data Section Macro
