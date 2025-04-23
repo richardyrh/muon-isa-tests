@@ -1,7 +1,7 @@
 #ifndef __VX_MACROS_SCALAR_H
 #define __VX_MACROS_SCALAR_H
 
-#define SPIN( spin_cyles ) \
+#define SPIN( spin_cycles ) \
     li x11, spin_cycles; \
 1:  addi x11, x11, -1; \
     bgez x11, 1b; \
@@ -106,6 +106,17 @@
     add x12, x12, x13; \
     sb x11, 0(x12); \
 
+#define PUSH_STATE_R( idx, base ) \
+    csrr x11, tmask; \
+    la x12, base; \
+    mv x13, idx; \
+    slli x13, x13, 3; \
+    add x12, x12, x13; \
+    csrr x13, mhartid; \
+    srli x13, x13, 3; \
+    add x12, x12, x13; \
+    sb x11, 0(x12); \
+
 // checks 32 threads at once
 // requires threads=8
 #define CHECK_STATE_32( idx, base, result ) \
@@ -129,6 +140,31 @@
     li x7, result; \
     bne x11, x7, fail; \
 
+#define CHECK_STATE_64( idx, base, result_lo, result_hi ) \
+    li x11, 1; \
+    la x12, 1f; \
+    vx_wspawn x11, x12; \
+1:  li x11, 1; \
+    vx_tmc x11; \
+    csrr x11, wid; \
+    beqz x11, 2f; \
+    vx_tmc zero; \
+    \
+2:  la x11, base; \
+    mv x12, zero; \
+    la x12, base; \
+    li x13, idx; \
+    slli x13, x13, 3; \
+    add x12, x12, x13; \
+    lw x11, 0(x12); \
+    sw zero, 0(x12); \
+    li x7, result_lo; \
+    bne x11, x7, fail; \
+    lw x11, 4(x12); \
+    sw zero, 4(x12); \
+    li x7, result_hi; \
+    bne x11, x7, fail; \
+
 #define TEST_SPLIT( testnum, code... ) \
 test_ ## testnum: \
     li t0, 1; \
@@ -136,6 +172,20 @@ test_ ## testnum: \
     vx_wspawn t0, t1; \
 1:  csrr t0, wid; \
     beqz t0, 2f; \
+    vx_tmc zero; \
+2:  li x11, -1; \
+    vx_tmc x11; \
+    li  TESTNUM, testnum; \
+    code; \
+
+#define TEST_BAR( testnum, num_warps, code... ) \
+test_ ## testnum: \
+    li t0, num_warps; \
+    la t1, 1f; \
+    vx_wspawn t0, t1; \
+1:  csrr t0, wid; \
+    li t1, num_warps; \
+    blt t0, t1, 2f; \
     vx_tmc zero; \
 2:  li x11, -1; \
     vx_tmc x11; \

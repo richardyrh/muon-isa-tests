@@ -3,6 +3,6 @@
 #-----------------------------------------------------------------------
 
 vx32_sc_tests = \
-	tmc wspawn split pred
+	tmc wspawn split pred bar
 
 vx32_p_tests = $(addprefix vx32-p-, $(vx32_sc_tests))
