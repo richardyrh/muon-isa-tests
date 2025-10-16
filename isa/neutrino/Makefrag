@@ -1,0 +1,8 @@
+#=======================================================================
+# Makefrag for neutrino tests
+#-----------------------------------------------------------------------
+
+neutrino_sc_tests = \
+	sync
+
+neutrino_p_tests = $(addprefix neutrino-p-, $(neutrino_sc_tests))
