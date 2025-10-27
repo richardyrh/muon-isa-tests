@@ -36,7 +36,7 @@ RVTEST_CODE_BEGIN
     li t2, 2;
     vx_bar t2, 8; \
     bnez t4, 3f; \
-    CHECK_STATE_64(0, alive, 0xffffffff, 0xffffffff); \
+    CHECK_STATE_64(0, alive, 0xffffffffffffffffULL); \
 3:  nop; \
   )
 

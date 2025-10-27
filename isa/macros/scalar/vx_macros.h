@@ -113,7 +113,7 @@
         li  x7, (result_hi64 >> 32); \
         bne x20, x7, fail; \
         CHECK_THREADS( x20, num_warps, 32, (base + 256) ) \
-        li  x7, result_hi64; \
+        li  x7, (result_hi64 & 0xffffffff); \
         bne x20, x7, fail; \
         CHECK_THREADS( x20, num_warps, 32, (base + 128) ) \
         li  x7, (result_lo64 >> 32); \
