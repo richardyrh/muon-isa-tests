@@ -1,6 +1,8 @@
 #ifndef __VX_MACROS_SCALAR_H
 #define __VX_MACROS_SCALAR_H
 
+#define LOG_LANES 4
+
 #define SPIN( spin_cycles ) \
     li x11, spin_cycles; \
 1:  addi x11, x11, -1; \
@@ -10,17 +12,20 @@
 // that involves writing to its warp id byte and reading
 // all bytes to see if a given amount of warps arrived.
 // this location should really only be used once
-#define BUSY_BAR( loc, warps ) \
+#define BUSY_BAR( loc, mask_lo, mask_hi ) \
     la t0, loc; \
     csrr t1, mhartid; \
-    srli t1, t1, 3; \
+    srli t1, t1, LOG_LANES; \
     add t1, t0, t1; /* my byte addr */ \
     li t2, 0xff; /* byte to store */ \
     li t3, 1; \
-    li t3, (1ULL << (8 * warps)) - 1; /* target value */ \
+    li t3, mask_lo; /* target value lo */ \
+    li t4, mask_hi; /* target value hi */ \
 1:  sb t2, 0(t1); \
-    lw t4, 0(t0); \
-    bne t4, t3, 1b; \
+    lw t5, 0(t0); \
+    bne t5, t3, 1b; \
+    lw t5, 4(t0); \
+    bne t5, t4, 1b; \
 
 // this function has each active thread store to a memory location
 // corresponding to their global thread id, and ensures
@@ -52,18 +57,18 @@
     mv x12, zero; \
     li x13, num_threads; /* read up to 64 words */ \
 3:  beq x12, x13, 4f; \
-    slli x14, x12, 2; \
+    slli x14, x12, 2; /* word offset corresponding to gtid */ \
     add x14, x11, x14; \
     lw x15, 0(x14); /* read base + 4 * i */ \
     sw zero, 0(x14); /* clear after read */ \
-    andi x15, x15, 0x11; /* take bit 0 */ \
+    andi x15, x15, 0x1; /* take bit 0 */ \
     sll x15, x15, x12; /* shift left i bits */ \
     or x16, x16, x15; /* or into result */ \
     addi x12, x12, 1; /* inc counter */ \
     j 3b; \
 4:  mv target_reg, x16; /* exit */ \
 
-#define TEST_VX( testnum, result, num_warps, total_num_threads, base, code... ) \
+#define TEST_VX_32T( testnum, result, num_warps, base, code... ) \
     TEST_CASE( testnum, x20, result, \
         li x11, num_warps; \
         la x12, 1f; \
@@ -73,11 +78,11 @@
         li  TESTNUM, testnum; \
         code; \
         MARK_LIVE_SPIN( base, 100 ) \
-        CHECK_THREADS( x20, num_warps, total_num_threads, base ) \
+        CHECK_THREADS( x20, num_warps, 32, base ) \
     )
 
 // checks 64 threads
-#define TEST_VX_2C( testnum, result, num_warps, base, code... ) \
+#define TEST_VX( testnum, result, num_warps, base, code... ) \
     TEST_CASE( testnum, x20, result, \
         li x11, num_warps; \
         la x12, 1f; \
@@ -93,16 +98,39 @@
         CHECK_THREADS( x20, num_warps, 32, base ) \
     )
 
+// checks 128 threads
+#define TEST_VX_128T( testnum, result_hi64, result_lo64, num_warps, base, code... ) \
+    TEST_CASE( testnum, x20, result_lo64, \
+        li x11, num_warps; \
+        la x12, 1f; \
+        vx_wspawn x11, x12; \
+1:      li x20, -1; \
+        vx_tmc x20; \
+        li  TESTNUM, testnum; \
+        code; \
+        MARK_LIVE_SPIN( base, 200 ) \
+        CHECK_THREADS( x20, num_warps, 32, (base + 384) ) \
+        li  x7, (result_hi64 >> 32); \
+        bne x20, x7, fail; \
+        CHECK_THREADS( x20, num_warps, 32, (base + 256) ) \
+        li  x7, result_hi64; \
+        bne x20, x7, fail; \
+        CHECK_THREADS( x20, num_warps, 32, (base + 128) ) \
+        li  x7, (result_lo64 >> 32); \
+        bne x20, x7, fail; \
+        CHECK_THREADS( x20, num_warps, 32, base ) \
+    )
+
 
 // requires threads=8
 #define PUSH_STATE( idx, base ) \
     csrr x11, tmask; \
     la x12, base; \
     li x13, idx; \
-    slli x13, x13, 3; \
+    slli x13, x13, LOG_LANES; \
     add x12, x12, x13; \
     csrr x13, mhartid; \
-    srli x13, x13, 3; \
+    srli x13, x13, LOG_LANES; \
     add x12, x12, x13; \
     sb x11, 0(x12); \
 
@@ -110,10 +138,10 @@
     csrr x11, tmask; \
     la x12, base; \
     mv x13, idx; \
-    slli x13, x13, 3; \
+    slli x13, x13, LOG_LANES; \
     add x12, x12, x13; \
     csrr x13, mhartid; \
-    srli x13, x13, 3; \
+    srli x13, x13, LOG_LANES; \
     add x12, x12, x13; \
     sb x11, 0(x12); \
 
