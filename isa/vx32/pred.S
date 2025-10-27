@@ -30,7 +30,7 @@ RVTEST_CODE_BEGIN
     andi t0, t0, 1; \
     vx_pred t0, zero; \
     PUSH_STATE(0, alive);
-    CHECK_STATE_32(0, alive, 0x000000aa); \
+    CHECK_STATE_32(0, alive, 0x0000aaaa); \
   )
 
   // vx_pred_n
@@ -39,7 +39,7 @@ RVTEST_CODE_BEGIN
     andi t0, t0, 1; \
     vx_pred_n t0, zero; \
     PUSH_STATE(0, alive);
-    CHECK_STATE_32(0, alive, 0x00000055); \
+    CHECK_STATE_32(0, alive, 0x00005555); \
   )
 
   // nested vx_pred (pred - pred)
@@ -52,7 +52,7 @@ RVTEST_CODE_BEGIN
     srli t1, t1, 1; \
     vx_pred t1, zero;
     PUSH_STATE(0, alive);
-    CHECK_STATE_32(0, alive, 0x00000088); \
+    CHECK_STATE_32(0, alive, 0x00008888); \
   )
 
   // nested vx_pred (pred_n - pred_n)
@@ -65,7 +65,7 @@ RVTEST_CODE_BEGIN
     srli t1, t1, 1; \
     vx_pred_n t1, zero; /* exclude 2, 6 */ \
     PUSH_STATE(0, alive);
-    CHECK_STATE_32(0, alive, 0x00000011); \
+    CHECK_STATE_32(0, alive, 0x00001111); \
   )
 
   // tmc -> pred
@@ -76,7 +76,7 @@ RVTEST_CODE_BEGIN
     andi t1, t1, 1; \
     vx_pred t1, zero; \
     PUSH_STATE(0, alive);
-    CHECK_STATE_32(0, alive, 0x0000000a); \
+    CHECK_STATE_64(0, alive, 0x0000000a); \
   )
 
   // zero result mask case
@@ -89,8 +89,8 @@ RVTEST_CODE_BEGIN
     addi t0, t0, 2; /* first active thread is 1, should use tmask=3 */ \
     vx_pred_n t1, t0; /* mask is 0 after this, fallback to rs2 */ \
     PUSH_STATE(1, alive);
-    CHECK_STATE_32(0, alive, 0x000000aa); \
-    CHECK_STATE_32(1, alive, 0x00000003); \
+    CHECK_STATE_64(0, alive, 0x000000aa); \
+    CHECK_STATE_64(1, alive, 0x00000003); \
   )
 
   // zero result mask case in inner branch
