@@ -12,15 +12,15 @@
 // that involves writing to its warp id byte and reading
 // all bytes to see if a given amount of warps arrived.
 // this location should really only be used once
-#define BUSY_BAR( loc, mask_lo, mask_hi ) \
+#define BUSY_BAR( loc, mask ) \
     la t0, loc; \
     csrr t1, mhartid; \
     srli t1, t1, LOG_LANES; \
     add t1, t0, t1; /* my byte addr */ \
     li t2, 0xff; /* byte to store */ \
     li t3, 1; \
-    li t3, mask_lo; /* target value lo */ \
-    li t4, mask_hi; /* target value hi */ \
+    li t3, (mask & 0xffffffff); /* target value lo */ \
+    li t4, (mask >> 32); /* target value hi */ \
 1:  sb t2, 0(t1); \
     lw t5, 0(t0); \
     bne t5, t3, 1b; \
@@ -123,25 +123,38 @@
 
 
 // requires threads=8
+#define PUSH_STATE_8( idx, base ) \
+    csrr x11, tmask; \
+    la x12, base; \
+    li x13, idx; \
+    slli x13, x13, 4; \
+    add x12, x12, x13; \
+    csrr x13, mhartid; \
+    srli x13, x13, 3; \
+    add x12, x12, x13; \
+    sb x11, 0(x12); \
+
 #define PUSH_STATE( idx, base ) \
     csrr x11, tmask; \
     la x12, base; \
     li x13, idx; \
-    slli x13, x13, LOG_LANES; \
+    slli x13, x13, 4; /* idx * (total threads / 8) */ \
     add x12, x12, x13; \
     csrr x13, mhartid; \
-    srli x13, x13, LOG_LANES; \
+    srli x13, x13, LOG_LANES; /* round to thread 0 idx */ \
+    slli x13, x13, (LOG_LANES - 3); /* 8 lanes per byte */ \
     add x12, x12, x13; \
-    sb x11, 0(x12); \
+    sh x11, 0(x12); \
 
 #define PUSH_STATE_R( idx, base ) \
     csrr x11, tmask; \
     la x12, base; \
     mv x13, idx; \
-    slli x13, x13, LOG_LANES; \
+    slli x13, x13, 4; \
     add x12, x12, x13; \
     csrr x13, mhartid; \
-    srli x13, x13, LOG_LANES; \
+    srli x13, x13, LOG_LANES; /* round to thread 0 idx */ \
+    slli x13, x13, (LOG_LANES - 3); /* 8 lanes per byte */ \
     add x12, x12, x13; \
     sb x11, 0(x12); \
 
@@ -161,14 +174,14 @@
     mv x12, zero; \
     la x12, base; \
     li x13, idx; \
-    slli x13, x13, 3; \
+    slli x13, x13, 4; \
     add x12, x12, x13; \
     lw x11, 0(x12); \
     sw zero, 0(x12); \
     li x7, result; \
     bne x11, x7, fail; \
 
-#define CHECK_STATE_64( idx, base, result_lo, result_hi ) \
+#define CHECK_STATE_64( idx, base, result ) \
     li x11, 1; \
     la x12, 1f; \
     vx_wspawn x11, x12; \
@@ -182,15 +195,15 @@
     mv x12, zero; \
     la x12, base; \
     li x13, idx; \
-    slli x13, x13, 3; \
+    slli x13, x13, 4; \
     add x12, x12, x13; \
     lw x11, 0(x12); \
     sw zero, 0(x12); \
-    li x7, result_lo; \
+    li x7, (result & 0xffffffff); \
     bne x11, x7, fail; \
     lw x11, 4(x12); \
     sw zero, 4(x12); \
-    li x7, result_hi; \
+    li x7, (result >> 32); \
     bne x11, x7, fail; \
 
 #define TEST_SPLIT( testnum, code... ) \
