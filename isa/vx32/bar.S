@@ -22,10 +22,10 @@ RVTEST_CODE_BEGIN
   la t1, 1f;
   vx_wspawn t0, t1;
 1:
-  // li gp, 2;
+
   // wait for 1 warp
   TEST_BAR( 2, 4, \
-    csrr t4, cid;
+    li t4, 0; \
     csrr t0, wid; \
     bnez t0, 2f; \
     li t0, 100; \
@@ -33,8 +33,26 @@ RVTEST_CODE_BEGIN
     bnez t0, 1b; \
 2:  vx_bar t4, 4; \
     PUSH_STATE(0, alive); \
-    li t2, 2;
-    vx_bar t2, 8; \
+    CHECK_STATE_64(0, alive, 0xffffffffffffffffULL); \
+  )
+
+  // skip subsequent tests for 1 core configs
+  csrr t0, 0xfc2; /* num cores */
+  li t1, 1;
+  beq t0, t1, pass;
+
+  // wait for 1 warp
+  TEST_BAR( 3, 4, \
+    csrr t4, cid; /* bar id = core id */ \
+    csrr t0, wid; \
+    bnez t0, 2f; /* warp >0 fast forward */ \
+    li t0, 100; \
+1:  addi t0, t0, -1; \
+    bnez t0, 1b; /* warp 0 count to 100 */ \
+2:  vx_bar t4, 4; \
+    PUSH_STATE(0, alive); \
+    li t2, 2; \
+    vx_bar t2, 8; /* sync both cores */ \
     bnez t4, 3f; \
     CHECK_STATE_64(0, alive, 0xffffffffffffffffULL); \
 3:  nop; \
