@@ -21,6 +21,7 @@ include $(src_dir)/rv32uf/Makefrag
 # include $(src_dir)/rv32mi/Makefrag
 include $(src_dir)/vx32/Makefrag
 include $(src_dir)/neutrino/Makefrag
+include $(src_dir)/mu32/Makefrag
 
 default: all
 
@@ -86,6 +87,7 @@ $(eval $(call compile_template,rv32uf,-march=rv32im_zfinx -mabi=ilp32))
 # $(eval $(call compile_template,rv32mi,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,vx32,-march=rv32im_zfinx -mabi=ilp32))
 $(eval $(call compile_template,neutrino,-march=rv32im_zfinx -mabi=ilp32))
+$(eval $(call compile_template,mu32,-march=rv32im_zfinx -mabi=ilp32))
 $(info tests="$(tests)")
 
 tests_dump = $(addsuffix .dump, $(tests))
