@@ -135,6 +135,8 @@ RVTEST_DATA_BEGIN
 
   TEST_DATA
 
+# joshua TODO: need to put this into shared memory; loader won't do it. 
+# same w/ other mu32 shared mem tests 
 tdat:
     .rept 20
     .word 0xdeadbeef
