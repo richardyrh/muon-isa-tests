@@ -17,6 +17,17 @@
 RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
+  # load tdat into shared memory
+  li a0, 0xbeef
+  la a1, tdat1
+  li a2, 0
+  li a3, 10
+loop:
+  sh.shared a0, 0(a1)
+  addi a1, a1, 2
+  addi a2, a2, 1
+  blt a2, a3, loop
+
   # preprocessor abuse to use shared memory instructions
   #define sb sb.shared
   #define lb lb.shared
