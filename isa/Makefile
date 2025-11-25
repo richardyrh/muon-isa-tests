@@ -12,7 +12,7 @@ include $(src_dir)/rv32um/Makefrag
 # include $(src_dir)/rv32ua/Makefrag
 include $(src_dir)/rv32uf/Makefrag
 # include $(src_dir)/rv32ud/Makefrag
-# include $(src_dir)/rv32uzfh/Makefrag
+include $(src_dir)/rv32uzfh/Makefrag
 # include $(src_dir)/rv32uzba/Makefrag
 # include $(src_dir)/rv32uzbb/Makefrag
 # include $(src_dir)/rv32uzbc/Makefrag
@@ -78,7 +78,7 @@ $(eval $(call compile_template,rv32um,-march=rv32im_zfinx -mabi=ilp32))
 # $(eval $(call compile_template,rv32ua,-march=rv32g -mabi=ilp32))
 $(eval $(call compile_template,rv32uf,-march=rv32im_zfinx -mabi=ilp32))
 # $(eval $(call compile_template,rv32ud,-march=rv32g -mabi=ilp32))
-# $(eval $(call compile_template,rv32uzfh,-march=rv32g_zfh -mabi=ilp32))
+$(eval $(call compile_template,rv32uzfh,-march=rv32im_zfinx_zhinx -mabi=ilp32))
 # $(eval $(call compile_template,rv32uzba,-march=rv32g_zba -mabi=ilp32))
 # $(eval $(call compile_template,rv32uzbb,-march=rv32g_zbb -mabi=ilp32))
 # $(eval $(call compile_template,rv32uzbc,-march=rv32g_zbc -mabi=ilp32))
