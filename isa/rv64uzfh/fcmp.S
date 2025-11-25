@@ -17,13 +17,13 @@ RVTEST_CODE_BEGIN
   # Arithmetic tests
   #-------------------------------------------------------------
 
-  TEST_FP_CMP_OP_H( 2, feq.h, 0x00, 1, -1.36, -1.36)
-  TEST_FP_CMP_OP_H( 3, fle.h, 0x00, 1, -1.36, -1.36)
-  TEST_FP_CMP_OP_H( 4, flt.h, 0x00, 0, -1.36, -1.36)
+  TEST_FP_CMP_OP_H( 2, feq.h, 0x00, 0x0001, 0xbd71, 0xbd71)
+  TEST_FP_CMP_OP_H( 3, fle.h, 0x00, 0x0001, 0xbd71, 0xbd71)
+  TEST_FP_CMP_OP_H( 4, flt.h, 0x00, 0x0000, 0xbd71, 0xbd71)
 
-  TEST_FP_CMP_OP_H( 5, feq.h, 0x00, 0, -1.37, -1.36)
-  TEST_FP_CMP_OP_H( 6, fle.h, 0x00, 1, -1.37, -1.36)
-  TEST_FP_CMP_OP_H( 7, flt.h, 0x00, 1, -1.37, -1.36)
+  TEST_FP_CMP_OP_H( 5, feq.h, 0x00, 0x0000, 0xbd7b, 0xbd71)
+  TEST_FP_CMP_OP_H( 6, fle.h, 0x00, 0x0001, 0xbd7b, 0xbd71)
+  TEST_FP_CMP_OP_H( 7, flt.h, 0x00, 0x0001, 0xbd7b, 0xbd71)
 
   TEST_PASSFAIL
 

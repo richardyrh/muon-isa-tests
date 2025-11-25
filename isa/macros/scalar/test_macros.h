@@ -441,8 +441,6 @@ test_ ## testnum: \
 #define FMVXH mv
 #define FMVHX mv
 
-#define float16 half
-
 #define TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, val2, val3, code... ) \
 test_ ## testnum: \
   li  TESTNUM, testnum; \
@@ -459,10 +457,10 @@ test_ ## testnum: \
   .pushsection .data; \
   .align 1; \
   test_ ## testnum ## _data: \
-  .half val1; \
-  .float16 val2; \
-  .float16 val3; \
-  .result; \
+  .2byte val1; \
+  .2byte val2; \
+  .2byte val3; \
+  .2byte result; \
   .popsection
 
 #define TEST_FP_OP_S_INTERNAL( testnum, flags, result, val1, val2, val3, code... ) \
@@ -569,16 +567,16 @@ test_ ## testnum: \
                     fcvt.d.s f13, f10; fcvt.s.d f13, f13; FMVXS a0, f13)
 
 #define TEST_FCVT_H_S( testnum, result, val1 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, 0, float16 result, val1, 0.0, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, 0, result, val1, 0x0000, 0x0000, \
                     fcvt.s.h f13, f10; fcvt.h.s f13, f13; FMVXH a0, f13)
 
 #define TEST_FCVT_H_D( testnum, result, val1 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, 0, float16 result, val1, 0.0, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, 0, result, val1, 0x0000, 0x0000, \
                     fcvt.d.h f13, f10; fcvt.h.d f13, f13; FMVXH a0, f13)
 
 
 #define TEST_FP_OP1_H( testnum, inst, flags, result, val1 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, flags, float16 result, val1, 0.0, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, 0x0000, 0x0000, \
                     inst f13, f10; FMVXH a0, f13;)
 
 #define TEST_FP_OP1_S( testnum, inst, flags, result, val1 ) \
@@ -599,7 +597,7 @@ test_ ## testnum: \
                     inst f13, f10; FMVXS a0, f13)
 
 #define TEST_FP_OP1_H_DWORD_RESULT( testnum, inst, flags, result, val1 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, flags, word result, val1, 0.0, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, 0x0000, 0x0000, \
                     inst f13, f10; FMVXH a0, f13)
 
 #define TEST_FP_OP1_D32_DWORD_RESULT( testnum, inst, flags, result, val1 ) \
@@ -620,7 +618,7 @@ test_ ## testnum: \
                     inst f13, f10, f11; FMVXS a0, f13)
 
 #define TEST_FP_OP2_H( testnum, inst, flags, result, val1, val2 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, flags, float16 result, val1, val2, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, val2, 0x0000, \
                     inst f13, f10, f11; FMVXH a0, f13)
 
 #define TEST_FP_OP2_D32( testnum, inst, flags, result, val1, val2 ) \
@@ -637,7 +635,7 @@ test_ ## testnum: \
                     inst f13, f10, f11, f12; FMVXS a0, f13)
 
 #define TEST_FP_OP3_H( testnum, inst, flags, result, val1, val2, val3 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, flags, float16 result, val1, val2, val3, \
+  TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, val2, val3, \
                     inst f13, f10, f11, f12; FMVXH a0, f13)
 
 #define TEST_FP_OP3_D32( testnum, inst, flags, result, val1, val2, val3 ) \
@@ -654,7 +652,7 @@ test_ ## testnum: \
                     inst a0, f10, rm)
 
 #define TEST_FP_INT_OP_H( testnum, inst, flags, result, val1, rm ) \
-  TEST_FP_OP_H_INTERNAL( testnum, flags, word result, val1, 0.0, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, 0x0000, 0x0000, \
                     inst a0, f10, rm)
 
 #define TEST_FP_INT_OP_D32( testnum, inst, flags, result, val1, rm ) \
@@ -674,7 +672,7 @@ test_ ## testnum: \
                     inst a0, f10, f11)
 
 #define TEST_FP_CMP_OP_H( testnum, inst, flags, result, val1, val2 ) \
-  TEST_FP_OP_H_INTERNAL( testnum, flags, hword result, val1, val2, 0.0, \
+  TEST_FP_OP_H_INTERNAL( testnum, flags, result, val1, val2, 0x0000, \
                     inst a0, f10, f11)
 
 #define TEST_FP_CMP_OP_D32( testnum, inst, flags, result, val1, val2 ) \
@@ -733,7 +731,7 @@ test_ ## testnum: \
   .pushsection .data; \
   .align 1; \
   test_ ## testnum ## _data: \
-  .float16 result; \
+  .2byte result; \
   .popsection
 
 #define TEST_INT_FP_OP_D32( testnum, inst, result, val1 ) \

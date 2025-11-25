@@ -26,10 +26,10 @@ RVTEST_CODE_BEGIN
   TEST_CASE(n, a0, 0x1234 | (-(new_sign) << 15), \
     li a1, ((rs1_sign) << 15) | 0x1234; \
     li a2, -(rs2_sign); \
-    fmv.h.x f1, a1; \
-    fmv.h.x f2, a2; \
+    FMVHX f1, a1; \
+    FMVHX f2, a2; \
     insn f0, f1, f2; \
-    fmv.x.h a0, f0)
+    FMVXH a0, f0)
 
   TEST_FSGNJS(10, fsgnj.h, 0, 0, 0)
   TEST_FSGNJS(11, fsgnj.h, 1, 0, 1)
