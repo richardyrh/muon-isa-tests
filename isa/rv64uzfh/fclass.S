@@ -18,8 +18,8 @@ RVTEST_CODE_BEGIN
   #-------------------------------------------------------------
 
   #define TEST_FCLASS_H(testnum, correct, input) \
-    TEST_CASE(testnum, a0, correct, li a0, input; FMVHX f10, a0; \
-                                    fclass.s a0, f10)
+    TEST_CASE(testnum, a0, correct, li a0, input; FMVHX a10, a0; \
+                                    fclass.h a0, a10)
 
   TEST_FCLASS_H( 2, 1 << 0, 0xfc00 )
   TEST_FCLASS_H( 3, 1 << 1, 0xbc00 )
