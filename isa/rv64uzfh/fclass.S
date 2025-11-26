@@ -21,16 +21,16 @@ RVTEST_CODE_BEGIN
     TEST_CASE(testnum, a0, correct, li a0, input; FMVHX a10, a0; \
                                     fclass.h a0, a10)
 
-  TEST_FCLASS_H( 2, 1 << 0, 0xfc00 )
-  TEST_FCLASS_H( 3, 1 << 1, 0xbc00 )
-  TEST_FCLASS_H( 4, 1 << 2, 0x83ff )
+  TEST_FCLASS_H( 2, 1 << 0, 0xff80 )
+  TEST_FCLASS_H( 3, 1 << 1, 0xbf80 )
+  TEST_FCLASS_H( 4, 1 << 2, 0x807f )
   TEST_FCLASS_H( 5, 1 << 3, 0x8000 )
   TEST_FCLASS_H( 6, 1 << 4, 0x0000 )
-  TEST_FCLASS_H( 7, 1 << 5, 0x03ff )
-  TEST_FCLASS_H( 8, 1 << 6, 0x3c00 )
-  TEST_FCLASS_H( 9, 1 << 7, 0x7c00 )
-  TEST_FCLASS_H(10, 1 << 8, 0x7c01 )
-  TEST_FCLASS_H(11, 1 << 9, 0x7e00 )
+  TEST_FCLASS_H( 7, 1 << 5, 0x007f )
+  TEST_FCLASS_H( 8, 1 << 6, 0x3f80 )
+  TEST_FCLASS_H( 9, 1 << 7, 0x7f80 )
+  TEST_FCLASS_H(10, 1 << 8, 0x7f81 )
+  TEST_FCLASS_H(11, 1 << 9, 0x7fc1 )
 
   TEST_PASSFAIL
 

@@ -16,24 +16,24 @@
 RVTEST_RV64UF
 RVTEST_CODE_BEGIN
 
-  # Make sure infinities with different mantissas compare as equal.
+  # Make sure infinities with different mantissas compare as equal (bf16).
   la t0, minf
-  lw a1, 0(t0)
+  flh a1, 0(t0)
   la t0, three
-  lw a2, 0(t0)
-  fmul.s a3, a1, a2
-  TEST_CASE( 2, a0, 1, feq.s a0, a1, a2)
-  TEST_CASE( 3, a0, 1, fle.s a0, a1, a2)
-  TEST_CASE( 4, a0, 0, flt.s a0, a1, a2)
+  flh a2, 0(t0)
+  fmul.h a3, a1, a2
+  TEST_CASE( 2, a0, 1, feq.h a0, a1, a2)
+  TEST_CASE( 3, a0, 1, fle.h a0, a1, a2)
+  TEST_CASE( 4, a0, 0, flt.h a0, a1, a2)
 
   # Likewise, but for zeroes.
-  fcvt.s.w a1, x0
+  fcvt.h.w a1, x0
   li a0, 1
-  fcvt.s.w a2, a0
-  fmul.s a3, a1, a2
-  TEST_CASE(5, a0, 1, feq.s a0, a1, a2)
-  TEST_CASE(6, a0, 1, fle.s a0, a1, a2)
-  TEST_CASE(7, a0, 0, flt.s a0, a1, a2)
+  fcvt.h.w a2, a0
+  fmul.h a3, a1, a2
+  TEST_CASE(5, a0, 1, feq.h a0, a1, a2)
+  TEST_CASE(6, a0, 1, fle.h a0, a1, a2)
+  TEST_CASE(7, a0, 0, flt.h a0, a1, a2)
 
   TEST_PASSFAIL
 
@@ -42,7 +42,7 @@ RVTEST_CODE_END
   .data
 RVTEST_DATA_BEGIN
 
-minf: .float -Inf
-three: .float 3.0
+minf: .2byte 0xff80  # -inf (bf16)
+three: .2byte 0x4040 # 3.0 (bf16)
 
 RVTEST_DATA_END

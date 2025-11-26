@@ -5,7 +5,7 @@
 #-----------------------------------------------------------------------------
 #
 # This test verifies that the fmv.h.x, fmv.x.h, and fsgnj[x|n].d instructions
-# and the fcsr work properly.
+# and the fcsr work properly. Uses bf16 bit-patterns.
 #
 
 #include "riscv_test.h"
@@ -23,8 +23,8 @@ RVTEST_CODE_BEGIN
   TEST_CASE(8, a0, 0x50, frsr a0)
 
 #define TEST_FSGNJS(n, insn, new_sign, rs1_sign, rs2_sign) \
-  TEST_CASE(n, a0, 0x1234 | (-(new_sign) << 15), \
-    li a1, ((rs1_sign) << 15) | 0x1234; \
+  TEST_CASE(n, a0, 0x3f80 | (-(new_sign) << 15), \
+    li a1, ((rs1_sign) << 15) | 0x3f80; \
     li a2, -(rs2_sign); \
     FMVHX a3, a1; \
     FMVHX a4, a2; \

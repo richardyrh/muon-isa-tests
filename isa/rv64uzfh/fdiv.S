@@ -17,16 +17,16 @@ RVTEST_CODE_BEGIN
   # Arithmetic tests
   #-------------------------------------------------------------
 
-  TEST_FP_OP2_H(2,  fdiv.h, 1, 0x3c9f, 0x4248, 0x4170 );
-  TEST_FP_OP2_H(3,  fdiv.h, 1, 0xbbfe, 0xe4d2, 0x64d3 );
-  TEST_FP_OP2_H(4,  fdiv.h, 0, 0x4248, 0x4248, 0x3c00 );
+  TEST_FP_OP2_H(2,  fdiv.h, 1, 0x3f94, 0x4049, 0x402e );
+  TEST_FP_OP2_H(3,  fdiv.h, 1, 0xbf80, 0xc49a, 0x449a );
+  TEST_FP_OP2_H(4,  fdiv.h, 0, 0x4049, 0x4049, 0x3f80 );
 
-  TEST_FP_OP1_H(5,  fsqrt.h, 1, 0x3f17, 0x4248 );
-  TEST_FP_OP1_H(6,  fsqrt.h, 0, 0x5640, 0x70e2 );
+  TEST_FP_OP1_H(5,  fsqrt.h, 1, 0x3fe3, 0x4049 );
+  TEST_FP_OP1_H(6,  fsqrt.h, 0, 0x42c8, 0x461c );
 
-  TEST_FP_OP1_H_DWORD_RESULT(7,  fsqrt.h, 0x10, 0x00007e00, 0xbc00 );
+  TEST_FP_OP1_H_DWORD_RESULT(7,  fsqrt.h, 0x10, 0x00007fc0, 0xbf80 );
 
-  TEST_FP_OP1_H(8,  fsqrt.h, 1, 0x4a8a, 0x5958);
+  TEST_FP_OP1_H(8,  fsqrt.h, 1, 0x4151, 0x432b);
 
 
   TEST_PASSFAIL

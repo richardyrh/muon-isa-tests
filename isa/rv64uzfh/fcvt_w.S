@@ -16,39 +16,39 @@ RVTEST_CODE_BEGIN
   # Arithmetic tests
   #-------------------------------------------------------------
 
-  TEST_FP_INT_OP_H( 2,  fcvt.w.h, 0x01,         -1, 0xbc66, rtz);
-  TEST_FP_INT_OP_H( 3,  fcvt.w.h, 0x00,         -1, 0xbc00, rtz);
-  TEST_FP_INT_OP_H( 4,  fcvt.w.h, 0x01,          0, 0xbb33, rtz);
-  TEST_FP_INT_OP_H( 5,  fcvt.w.h, 0x01,          0, 0x3b33, rtz);
-  TEST_FP_INT_OP_H( 6,  fcvt.w.h, 0x00,          1, 0x3c00, rtz);
-  TEST_FP_INT_OP_H( 7,  fcvt.w.h, 0x01,          1, 0x3c66, rtz);
-  TEST_FP_INT_OP_H( 8,  fcvt.w.h, 0x00,      -2054, 0xe803, rtz);
-  TEST_FP_INT_OP_H( 9,  fcvt.w.h, 0x00,       2054, 0x6803, rtz);
+  TEST_FP_INT_OP_H( 2,  fcvt.w.h, 0x01,         -1, 0xbf8d, rtz);
+  TEST_FP_INT_OP_H( 3,  fcvt.w.h, 0x00,         -1, 0xbf80, rtz);
+  TEST_FP_INT_OP_H( 4,  fcvt.w.h, 0x01,          0, 0xbf66, rtz);
+  TEST_FP_INT_OP_H( 5,  fcvt.w.h, 0x01,          0, 0x3f66, rtz);
+  TEST_FP_INT_OP_H( 6,  fcvt.w.h, 0x00,          1, 0x3f80, rtz);
+  TEST_FP_INT_OP_H( 7,  fcvt.w.h, 0x01,          1, 0x3f8d, rtz);
+  TEST_FP_INT_OP_H( 8,  fcvt.w.h, 0x00,      -2048, 0xc500, rtz);
+  TEST_FP_INT_OP_H( 9,  fcvt.w.h, 0x00,       2048, 0x4500, rtz);
 
-  TEST_FP_INT_OP_H(12, fcvt.wu.h, 0x10,          0, 0xc200, rtz);
-  TEST_FP_INT_OP_H(13, fcvt.wu.h, 0x10,          0, 0xbc00, rtz);
-  TEST_FP_INT_OP_H(14, fcvt.wu.h, 0x01,          0, 0xbb33, rtz);
-  TEST_FP_INT_OP_H(15, fcvt.wu.h, 0x01,          0, 0x3b33, rtz);
-  TEST_FP_INT_OP_H(16, fcvt.wu.h, 0x00,          1, 0x3c00, rtz);
-  TEST_FP_INT_OP_H(17, fcvt.wu.h, 0x01,          1, 0x3c66, rtz);
-  TEST_FP_INT_OP_H(18, fcvt.wu.h, 0x10,          0, 0xe803, rtz);
-  TEST_FP_INT_OP_H(19, fcvt.wu.h, 0x00,       2054, 0x6803, rtz);
+  TEST_FP_INT_OP_H(12, fcvt.wu.h, 0x10,          0, 0xc040, rtz);
+  TEST_FP_INT_OP_H(13, fcvt.wu.h, 0x10,          0, 0xbf80, rtz);
+  TEST_FP_INT_OP_H(14, fcvt.wu.h, 0x01,          0, 0xbf66, rtz);
+  TEST_FP_INT_OP_H(15, fcvt.wu.h, 0x01,          0, 0x3f66, rtz);
+  TEST_FP_INT_OP_H(16, fcvt.wu.h, 0x00,          1, 0x3f80, rtz);
+  TEST_FP_INT_OP_H(17, fcvt.wu.h, 0x01,          1, 0x3f8d, rtz);
+  TEST_FP_INT_OP_H(18, fcvt.wu.h, 0x10,          0, 0xc500, rtz);
+  TEST_FP_INT_OP_H(19, fcvt.wu.h, 0x00,       2048, 0x4500, rtz);
 
 #if __riscv_xlen >= 64
-  TEST_FP_INT_OP_H(22,  fcvt.l.h, 0x01,         -1, 0xbc66, rtz);
-  TEST_FP_INT_OP_H(23,  fcvt.l.h, 0x00,         -1, 0xbc00, rtz);
-  TEST_FP_INT_OP_H(24,  fcvt.l.h, 0x01,          0, 0xbb33, rtz);
-  TEST_FP_INT_OP_H(25,  fcvt.l.h, 0x01,          0, 0x3b33, rtz);
-  TEST_FP_INT_OP_H(26,  fcvt.l.h, 0x00,          1, 0x3c00, rtz);
-  TEST_FP_INT_OP_H(27,  fcvt.l.h, 0x01,          1, 0x3c66, rtz);
+  TEST_FP_INT_OP_H(22,  fcvt.l.h, 0x01,         -1, 0xbf8d, rtz);
+  TEST_FP_INT_OP_H(23,  fcvt.l.h, 0x00,         -1, 0xbf80, rtz);
+  TEST_FP_INT_OP_H(24,  fcvt.l.h, 0x01,          0, 0xbf66, rtz);
+  TEST_FP_INT_OP_H(25,  fcvt.l.h, 0x01,          0, 0x3f66, rtz);
+  TEST_FP_INT_OP_H(26,  fcvt.l.h, 0x00,          1, 0x3f80, rtz);
+  TEST_FP_INT_OP_H(27,  fcvt.l.h, 0x01,          1, 0x3f8d, rtz);
 
-  TEST_FP_INT_OP_H(32, fcvt.lu.h, 0x10,          0, 0xc200, rtz);
-  TEST_FP_INT_OP_H(33, fcvt.lu.h, 0x10,          0, 0xbc00, rtz);
-  TEST_FP_INT_OP_H(34, fcvt.lu.h, 0x01,          0, 0xbb33, rtz);
-  TEST_FP_INT_OP_H(35, fcvt.lu.h, 0x01,          0, 0x3b33, rtz);
-  TEST_FP_INT_OP_H(36, fcvt.lu.h, 0x00,          1, 0x3c00, rtz);
-  TEST_FP_INT_OP_H(37, fcvt.lu.h, 0x01,          1, 0x3c66, rtz);
-  TEST_FP_INT_OP_H(38, fcvt.lu.h, 0x10,          0, 0xe483, rtz);
+  TEST_FP_INT_OP_H(32, fcvt.lu.h, 0x10,          0, 0xc040, rtz);
+  TEST_FP_INT_OP_H(33, fcvt.lu.h, 0x10,          0, 0xbf80, rtz);
+  TEST_FP_INT_OP_H(34, fcvt.lu.h, 0x01,          0, 0xbf66, rtz);
+  TEST_FP_INT_OP_H(35, fcvt.lu.h, 0x01,          0, 0x3f66, rtz);
+  TEST_FP_INT_OP_H(36, fcvt.lu.h, 0x00,          1, 0x3f80, rtz);
+  TEST_FP_INT_OP_H(37, fcvt.lu.h, 0x01,          1, 0x3f8d, rtz);
+  TEST_FP_INT_OP_H(38, fcvt.lu.h, 0x10,          0, 0xc490, rtz);
 #endif
 
   # test negative NaN, negative infinity conversion
@@ -96,9 +96,9 @@ RVTEST_DATA_BEGIN
 #.word 0x7f800000
 
 tdat:
-.word 0xffffffff
-.word 0xffff7fff
-.word 0xfffffc00
-.word 0xffff7c00
+.word 0x0000ffc1
+.word 0x00007fc1
+.word 0x0000ff80
+.word 0x00007f80
 
 RVTEST_DATA_END
