@@ -44,6 +44,9 @@ MUON_SIM ?= /scratch/yrh/cyclotron/target/debug/cyclotron /scratch/yrh/cyclotron
 
 vpath %.S $(src_dir)
 
+soc_dir_rel := ../../soc
+fused_output_dir := fused
+
 #------------------------------------------------------------
 # Build assembly tests
 
@@ -94,14 +97,26 @@ tests_dump = $(addsuffix .dump, $(tests))
 tests_hex = $(addsuffix .hex, $(tests))
 tests32_out = $(addsuffix .out32, $(tests))
 
+fused_tests = $(addprefix $(fused_output_dir)/, $(tests))
+
+$(fused_output_dir):
+	mkdir -p $@
+
+$(fused_output_dir)/%: % | $(fused_output_dir)
+	@fused_path=$$($(MAKE) --silent -C $(soc_dir_rel) fuse-temp MUON_ELF=$$(pwd)/$<); \
+	cp $$fused_path $@
+
+fused-all: $(fused_output_dir) $(fused_tests)
+.PHONY: fused-all
+
 run: $(tests_out) $(tests32_out)
 
-junk += $(tests) $(tests_dump) $(tests_hex) $(tests_out) $(tests32_out)
+junk += $(tests) $(tests_dump) $(tests_hex) $(tests_out) $(tests32_out) $(fused_tests) $(fused_output_dir)
 
 #------------------------------------------------------------
 # Default
 
-all: $(tests_dump)
+all: $(tests_dump) fused-all
 
 #------------------------------------------------------------
 # Clean up

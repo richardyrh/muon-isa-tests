@@ -53,7 +53,15 @@
     beqz x11, 2f; \
     vx_tmc zero; \
 2:  mv x16, zero; /* at this point thread 0 of each core remains */ \
+    csrr x13, mhartid; \
+    csrr x11, 0xfc0; /* num lanes */ \
+    csrr x12, 0xfc1; /* num warps */ \
+    mul x11, x11, x12; /* core offset */ \
+    div x13, x13, x11; \
+    mul x13, x13, x11; \
+    slli x13, x13, 2; /* 4 bytes per record */ \
     la x11, base; \
+    add x11, x11, x13; /* core-specific location */ \
     mv x12, zero; \
     li x13, num_threads; /* read up to 64 words */ \
 3:  beq x12, x13, 4f; \
@@ -83,20 +91,22 @@
 
 // checks 64 threads
 #define TEST_VX( testnum, result, num_warps, base, code... ) \
-    TEST_CASE( testnum, x20, result, \
-        li x11, num_warps; \
-        la x12, 1f; \
-        vx_wspawn x11, x12; \
-1:      li x20, -1; \
-        vx_tmc x20; \
-        li  TESTNUM, testnum; \
-        code; \
-        MARK_LIVE_SPIN( base, 200 ) \
-        CHECK_THREADS( x20, num_warps, 32, (base + 128) ) \
-        li  x7, (result >> 32); \
-        bne x20, x7, fail; \
-        CHECK_THREADS( x20, num_warps, 32, base ) \
-    )
+test_ ## testnum: \
+    li  TESTNUM, testnum; \
+    li x11, num_warps; \
+    la x12, 1f; \
+    vx_wspawn x11, x12; \
+1:  li x20, -1; \
+    vx_tmc x20; \
+    li  TESTNUM, testnum; \
+    code; \
+    MARK_LIVE_SPIN( base, 200 ) \
+    CHECK_THREADS( x20, num_warps, 32, (base + 128) ) \
+    li  x7, (result >> 32); \
+    bne x20, x7, fail; \
+    CHECK_THREADS( x20, num_warps, 32, base ) \
+    li  x7, MASK_XLEN(result); \
+    bne x20, x7, fail; \
 
 // checks 128 threads
 #define TEST_VX_128T( testnum, result_hi64, result_lo64, num_warps, base, code... ) \

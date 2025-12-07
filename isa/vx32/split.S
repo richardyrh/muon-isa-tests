@@ -19,6 +19,8 @@ RVTEST_CODE_BEGIN
 # -------------------------------------
   // these tests use only 1 core
   csrr t0, cid;
+  csrr t1, 0xcd0; /* cluster id */
+  add t0, t0, t1
   beqz t0, 1f;
   vx_tmc zero;
 1:
