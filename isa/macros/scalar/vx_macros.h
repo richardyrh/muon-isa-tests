@@ -43,13 +43,14 @@
 // this function reads from the memory location stored to by
 // MARK_LIVE_SPIN into a single register, with each bit corresponding
 // to each thread. It copies that value to target_reg.
-#define CHECK_THREADS( target_reg, num_warps, num_threads, base ) \
+#define CHECK_THREADS_WMASK( target_reg, num_warps, num_threads, base, wmask ) \
     li x11, num_warps; \
     la x12, 1f; \
     vx_wspawn x11, x12; /* make sure all warps are active */ \
 1:  li x11, 1; \
     vx_tmc x11; \
     csrr x11, wid; \
+    andi x11, x11, wmask; \
     beqz x11, 2f; \
     vx_tmc zero; \
 2:  mv x16, zero; /* at this point thread 0 of each core remains */ \
@@ -75,6 +76,9 @@
     addi x12, x12, 1; /* inc counter */ \
     j 3b; \
 4:  mv target_reg, x16; /* exit */ \
+
+#define CHECK_THREADS( target_reg, num_warps, num_threads, base ) \
+    CHECK_THREADS_WMASK( target_reg, num_warps, num_threads, base, 0xffff )
 
 #define TEST_VX_32T( testnum, result, num_warps, base, code... ) \
     TEST_CASE( testnum, x20, result, \
