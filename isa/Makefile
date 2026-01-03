@@ -104,7 +104,7 @@ $(fused_output_dir):
 
 $(fused_output_dir)/%: % | $(fused_output_dir)
 	@fused_path=$$($(MAKE) --silent -C $(soc_dir_rel) fuse-temp MUON_ELF=$$(pwd)/$<); \
-	cp $$fused_path $@
+	cp -v $$fused_path $@
 
 fused-all: $(fused_output_dir) $(fused_tests)
 .PHONY: fused-all
