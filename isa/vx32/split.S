@@ -21,9 +21,15 @@ RVTEST_CODE_BEGIN
   csrr t0, cid;
   csrr t1, 0xcd0; /* cluster id */
   add t0, t0, t1
-  beqz t0, 1f;
-  vx_tmc zero;
+  beqz t0, 2f;
+  // spin for 2000 counts
+  li t1, 2000;
 1:
+  addi t1, t1, -1;
+  bgez t1, 1b;
+  tohost zero;
+  vx_tmc zero;
+2:
   nop
 
   // simple split_n in one warp
