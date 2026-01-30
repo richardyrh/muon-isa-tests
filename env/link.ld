@@ -3,6 +3,10 @@ ENTRY(_start)
 
 SECTIONS
 {
+  /* shared memory addresses start at 0x0; loader does not put stuff in there
+   * so it needs to be populated at runtime. */
+  .shared_mem 0 (NOLOAD) : { KEEP(*(.shared)) }
+
   . = 0x10000000;
   .init : { KEEP(*(.init)) }
   .text.init : { KEEP(*(.text.init)) }

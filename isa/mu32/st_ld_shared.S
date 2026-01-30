@@ -17,16 +17,17 @@
 RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
-  # load tdat into shared memory
-  li a0, 0xdeadbeef
-  la a1, tdat
-  li a2, 0
-  li a3, 20
+  # memcpy tdat into shared memory
+  la a1, tdat_global
+  la a2, tdat
+  li a3, 80
 loop:
-  sw.shared a0, 0(a1)
-  addi a1, a1, 4
+  lbu.global a0, 0(a1)
+  sb.shared a0, 0(a2)
+  addi a1, a1, 1
   addi a2, a2, 1
-  blt a2, a3, loop
+  addi a3, a3, -1
+  bne a3, zero, loop
   
   # preprocessor abuse to use shared memory instructions
   #define sb sb.shared
@@ -146,7 +147,7 @@ RVTEST_DATA_BEGIN
 
   TEST_DATA
 
-tdat:
+tdat_global:
     .rept 20
     .word 0xdeadbeef
     .endr
@@ -154,3 +155,11 @@ tdat:
 
 RVTEST_DATA_END
 
+RVTEST_SHARED_DATA_BEGIN
+
+tdat:
+  .rept 20
+  .word 0
+  .endr
+
+RVTEST_SHARED_DATA_END

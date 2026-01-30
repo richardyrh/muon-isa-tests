@@ -348,5 +348,8 @@ reset_vector:                                                           \
 
 #define RVTEST_DATA_END .align 4; .global end_signature; end_signature:
 
+#define RVTEST_SHARED_DATA_BEGIN .pushsection .shared_mem, "aw", @nobits;
+#define RVTEST_SHARED_DATA_END .popsection;
+
 #endif
 

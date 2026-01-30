@@ -4,6 +4,7 @@
 
 mu32_sc_tests = \
 	ld_st_shared \
-	sb_shared sh_shared sw_shared st_ld_shared flush \
+	sb_shared sh_shared sw_shared st_ld_shared \
+	flush
 
 mu32_p_tests = $(addprefix mu32-p-, $(mu32_sc_tests))

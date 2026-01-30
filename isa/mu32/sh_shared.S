@@ -17,16 +17,17 @@
 RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
-  # load tdat into shared memory
-  li a0, 0xbeef
-  la a1, tdat1
-  li a2, 0
-  li a3, 10
+  # memcpy tdat into shared memory
+  la a1, tdat_global
+  la a2, tdat
+  li a3, 20
 loop:
-  sh.shared a0, 0(a1)
-  addi a1, a1, 2
+  lbu.global a0, 0(a1)
+  sb.shared a0, 0(a2)
+  addi a1, a1, 1
   addi a2, a2, 1
-  blt a2, a3, loop
+  addi a3, a3, -1
+  bne a3, zero, loop
 
   # preprocessor abuse to use shared memory instructions
   #define sb sb.shared
@@ -106,17 +107,30 @@ RVTEST_DATA_BEGIN
 
   TEST_DATA
 
-tdat:
-tdat1:  .half 0xbeef
-tdat2:  .half 0xbeef
-tdat3:  .half 0xbeef
-tdat4:  .half 0xbeef
-tdat5:  .half 0xbeef
-tdat6:  .half 0xbeef
-tdat7:  .half 0xbeef
-tdat8:  .half 0xbeef
-tdat9:  .half 0xbeef
-tdat10: .half 0xbeef
+tdat_global:
+tdat1_global:  .half 0xbeef
+tdat2_global:  .half 0xbeef
+tdat3_global:  .half 0xbeef
+tdat4_global:  .half 0xbeef
+tdat5_global:  .half 0xbeef
+tdat6_global:  .half 0xbeef
+tdat7_global:  .half 0xbeef
+tdat8_global:  .half 0xbeef
+tdat9_global:  .half 0xbeef
+tdat10_global: .half 0xbeef
 
 RVTEST_DATA_END
 
+RVTEST_SHARED_DATA_BEGIN
+tdat:
+tdat1:  .half 0
+tdat2:  .half 0
+tdat3:  .half 0
+tdat4:  .half 0
+tdat5:  .half 0
+tdat6:  .half 0
+tdat7:  .half 0
+tdat8:  .half 0
+tdat9:  .half 0
+tdat10: .half 0
+RVTEST_SHARED_DATA_END

@@ -17,16 +17,17 @@
 RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
-  # load tdat into shared memory
-  li a0, 0xef
-  la a1, tdat1
-  li a2, 0
+  # memcpy tdat into shared memory
+  la a1, tdat_global
+  la a2, tdat
   li a3, 10
 loop:
-  sb.shared a0, 0(a1)
+  lbu.global a0, 0(a1)
+  sb.shared a0, 0(a2)
   addi a1, a1, 1
   addi a2, a2, 1
-  blt a2, a3, loop
+  addi a3, a3, -1
+  bne a3, zero, loop
 
   # preprocessor abuse to use shared memory instructions
   #define sb sb.shared
@@ -106,16 +107,32 @@ RVTEST_DATA_BEGIN
 
   TEST_DATA
 
-tdat:
-tdat1:  .byte 0xef
-tdat2:  .byte 0xef
-tdat3:  .byte 0xef
-tdat4:  .byte 0xef
-tdat5:  .byte 0xef
-tdat6:  .byte 0xef
-tdat7:  .byte 0xef
-tdat8:  .byte 0xef
-tdat9:  .byte 0xef
-tdat10: .byte 0xef
+tdat_global:
+tdat1_global:  .byte 0xef
+tdat2_global:  .byte 0xef
+tdat3_global:  .byte 0xef
+tdat4_global:  .byte 0xef
+tdat5_global:  .byte 0xef
+tdat6_global:  .byte 0xef
+tdat7_global:  .byte 0xef
+tdat8_global:  .byte 0xef
+tdat9_global:  .byte 0xef
+tdat10_global: .byte 0xef
 
 RVTEST_DATA_END
+
+RVTEST_SHARED_DATA_BEGIN
+
+tdat:
+tdat1:  .byte 0
+tdat2:  .byte 0
+tdat3:  .byte 0
+tdat4:  .byte 0
+tdat5:  .byte 0
+tdat6:  .byte 0
+tdat7:  .byte 0
+tdat8:  .byte 0
+tdat9:  .byte 0
+tdat10: .byte 0
+
+RVTEST_SHARED_DATA_END

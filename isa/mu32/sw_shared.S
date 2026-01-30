@@ -17,16 +17,17 @@
 RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
-  # load tdat into shared memory
-  li a0, 0xdeadbeef
-  la a1, tdat1
-  li a2, 0
-  li a3, 10
+  # memcpy tdat into shared memory
+  la a1, tdat_global
+  la a2, tdat
+  li a3, 40
 loop:
-  sw.shared a0, 0(a1)
-  addi a1, a1, 4
+  lbu.global a0, 0(a1)
+  sb.shared a0, 0(a2)
+  addi a1, a1, 1
   addi a2, a2, 1
-  blt a2, a3, loop
+  addi a3, a3, -1
+  bne a3, zero, loop
 
   
   # preprocessor abuse to use shared memory instructions
@@ -103,17 +104,31 @@ RVTEST_DATA_BEGIN
 
   TEST_DATA
 
-tdat:
-tdat1:  .word 0xdeadbeef
-tdat2:  .word 0xdeadbeef
-tdat3:  .word 0xdeadbeef
-tdat4:  .word 0xdeadbeef
-tdat5:  .word 0xdeadbeef
-tdat6:  .word 0xdeadbeef
-tdat7:  .word 0xdeadbeef
-tdat8:  .word 0xdeadbeef
-tdat9:  .word 0xdeadbeef
-tdat10: .word 0xdeadbeef
+tdat_global:
+tdat1_global:  .word 0xdeadbeef
+tdat2_global:  .word 0xdeadbeef
+tdat3_global:  .word 0xdeadbeef
+tdat4_global:  .word 0xdeadbeef
+tdat5_global:  .word 0xdeadbeef
+tdat6_global:  .word 0xdeadbeef
+tdat7_global:  .word 0xdeadbeef
+tdat8_global:  .word 0xdeadbeef
+tdat9_global:  .word 0xdeadbeef
+tdat10_global: .word 0xdeadbeef
 
 RVTEST_DATA_END
+
+RVTEST_SHARED_DATA_BEGIN
+tdat:
+tdat1:  .word 0
+tdat2:  .word 0
+tdat3:  .word 0
+tdat4:  .word 0
+tdat5:  .word 0
+tdat6:  .word 0
+tdat7:  .word 0
+tdat8:  .word 0
+tdat9:  .word 0
+tdat10: .word 0
+RVTEST_SHARED_DATA_END
 
