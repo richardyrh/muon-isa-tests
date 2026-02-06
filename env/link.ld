@@ -16,6 +16,8 @@ SECTIONS
   .text : { *(.text) }
   . = ALIGN(0x1000);
   .data : { *(.data) }
+  . = ALIGN(0x1000);
+  .rodata : { *(.rodata) }
 
   /* exception handling.  We don't need this, but the C++ compiler generates
    * them.  Tuck it away after .text */
