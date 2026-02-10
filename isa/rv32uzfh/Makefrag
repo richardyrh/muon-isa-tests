@@ -4,6 +4,7 @@
 
 rv32uzfh_sc_tests = \
 	fadd fdiv fclass fcmp fcvt fcvt_w fmadd fmin \
+	fexp \
 	ldst move recoding \
 
 rv32uzfh_p_tests = $(addprefix rv32uzfh-p-, $(rv32uzfh_sc_tests))
