@@ -38,7 +38,7 @@ MUON_INSTALL ?= $(realpath ../../llvm/llvm-muon/bin)
 MUON_CC ?= $(MUON_INSTALL)/clang
 MUON_CC_OPTS ?= -static -mcmodel=medany -fvisibility=hidden -nostdlib -nostartfiles --gcc-toolchain=$(RISCV_TOOLCHAIN_PATH)
 MUON_CC_OPTS += -Xclang -target-feature -Xclang +vortex -mllvm -inline-threshold=262144 -fuse-ld=lld
-MUON_OBJDUMP ?= $(MUON_INSTALL)/llvm-objdump -d
+MUON_OBJDUMP ?= $(MUON_INSTALL)/llvm-objdump -D
 MUON_SIM ?= /scratch/yrh/cyclotron/target/debug/cyclotron /scratch/yrh/cyclotron/isa.toml --binary-path
 
 
