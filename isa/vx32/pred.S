@@ -13,10 +13,10 @@
 RVTEST_RV32U
 RVTEST_CODE_BEGIN
 
-# -------------------------------------
-# these tests assume 8 threads per warp
+# --------------------------------------
+# these tests assume 16 threads per warp
 # and might fail if that's not true
-# -------------------------------------
+# --------------------------------------
   // these tests use only 1 core
   csrr t0, cid;
   beqz t0, 1f;
