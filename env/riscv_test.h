@@ -292,7 +292,7 @@ handle_exception:                                                       \
         sw zero, tohost + 4, t5;                                        \
         j write_tohost;                                                 \
 reset_vector:                                                           \
-        li t0, 1;                                                       \
+        li t0, -1;                                                      \
         vx_tmc t0;                                                      \
         INIT_XREG;                                                      \
         li TESTNUM, 0;                                                  \
