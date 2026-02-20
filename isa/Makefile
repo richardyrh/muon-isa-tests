@@ -62,7 +62,7 @@ fused_output_dir := fused
 define compile_template
 
 $$($(1)_p_tests): $(1)-p-%: $(1)/%.S
-	$$(MUON_CC) $(2) $$(MUON_CC_OPTS) -I$(src_dir)/../env -I$(src_dir)/macros/scalar -T$(src_dir)/../env/link.ld $$< -o $$@
+	$$(MUON_CC) $(2) $$(MUON_CC_OPTS) -I$(src_dir)/../env -I$(src_dir)/macros/scalar -T$(src_dir)/../../lib/linker/mu_link.ld $$< -o $$@
 $(1)_tests += $$($(1)_p_tests)
 
 $(1)_tests_dump = $$(addsuffix .dump, $$($(1)_tests))
