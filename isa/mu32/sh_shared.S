@@ -17,17 +17,7 @@
 RVTEST_RV64U
 RVTEST_CODE_BEGIN
 
-  # memcpy tdat into shared memory
-  la a1, tdat_global
-  la a2, tdat
-  li a3, 20
-loop:
-  lbu.global a0, 0(a1)
-  sb.shared a0, 0(a2)
-  addi a1, a1, 1
-  addi a2, a2, 1
-  addi a3, a3, -1
-  bne a3, zero, loop
+  SHARED_MEM_TEST_INIT(tdat, tdat_global, 20)
 
   # preprocessor abuse to use shared memory instructions
   #define sb sb.shared

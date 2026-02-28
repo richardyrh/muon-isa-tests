@@ -19,6 +19,19 @@ test_ ## testnum: \
     code; \
     li  x7, MASK_XLEN(correctval); \
     bne testreg, x7, fail;
+  
+# initialize shared memory
+#define SHARED_MEM_TEST_INIT(tdat_shared_label, tdat_global_label, bytes) \
+  la a1, tdat_global_label; \
+  la a2, tdat_shared_label; \
+  li a3, bytes; \
+loop: \
+  lbu.global a0, 0(a1); \
+  sb.shared a0, 0(a2); \
+  addi a1, a1, 1; \
+  addi a2, a2, 1; \
+  addi a3, a3, -1; \
+  bne a3, zero, loop;
 
 # We use a macro hack to simpify code generation for various numbers
 # of bubble cycles.

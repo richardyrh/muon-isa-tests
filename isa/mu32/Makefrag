@@ -3,7 +3,7 @@
 #-----------------------------------------------------------------------
 
 mu32_sc_tests = \
-	ld_st_shared \
+	lb_shared lbu_shared lh_shared lhu_shared lw_shared ld_st_shared \
 	sb_shared sh_shared sw_shared st_ld_shared \
 	flush
 
