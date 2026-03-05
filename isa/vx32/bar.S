@@ -32,7 +32,8 @@ RVTEST_CODE_BEGIN
     li t0, 100; \
 1:  addi t0, t0, -1; \
     bnez t0, 1b; \
-2:  vx_bar t4, 8; /* 4 warps/core, 2 cores/cluster */ \
+2:  li t6, 8; \
+    vx_bar t4, t6; /* 4 warps/core, 2 cores/cluster */ \
     /* PUSH_STATE(0, alive); */ \
     /* CHECK_STATE_64(0, alive, 0xffffffffffffffffULL); */ \
   )
@@ -45,16 +46,20 @@ RVTEST_CODE_BEGIN
     li t0, 300; \
 1:  addi t0, t0, -1; \
     bnez t0, 1b; \
-2:  vx_bar t4, 8; /* 4 warps/core, 2 cores/cluster */ \
+2:  li t6, 8; \
+    vx_bar t4, t6; /* 4 warps/core, 2 cores/cluster */ \
   )
 
   // 4 simultaneous barriers
   TEST_VX( 4, 0xffffffffffffffffULL, 4, alive, \
     csrr t4, wid; \
     li t5, 15; \
-    vx_bar t5, 8; /* try to sync up first */ \
-    vx_bar t4, 2; \
-    vx_bar t5, 8; \
+    li t6, 8; \
+    vx_bar t5, t6; /* try to sync up first */ \
+    li t6, 2; \
+    vx_bar t4, t6; \
+    li t6, 8; \
+    vx_bar t5, t6; \
   )
 
   // different barrier every core
@@ -65,7 +70,8 @@ RVTEST_CODE_BEGIN
     addi t0, t0, 1; \
 1:  addi t0, t0, -1; \
     bnez t0, 1b; \
-    vx_bar t4, 4; /* ok to wait just for this core */ \
+    li t6, 4; \
+    vx_bar t4, t6; /* ok to wait just for this core */ \
   )
 
   // multiple barriers in a core
@@ -76,7 +82,8 @@ RVTEST_CODE_BEGIN
     addi t0, t0, 1; \
 1:  addi t0, t0, -1; \
     bnez t0, 1b; \
-    vx_bar t1, 4; /* 2 warps each core */ \
+    li t6, 4; \
+    vx_bar t1, t6; /* 2 warps each core */ \
     MARK_LIVE_SPIN( alive, 200 ); \
     /* each group of 2 warps should only see themselves! */ \
     addi t2, t1, -1; /* w0, 1: ffffffff, w2, 3: 0 */ \
@@ -85,7 +92,8 @@ RVTEST_CODE_BEGIN
     bne x20, t3, fail; \
     CHECK_THREADS_WMASK( x20, 0, 32, alive, 0xfffd ) \
     bne x20, t2, fail; \
-    vx_bar zero, 4; /* only 2 warps per core */
+    li t6, 4; \
+    vx_bar zero, t6; /* only 2 warps per core */
   )
 
   // repeat for good measure, interleaved warp patterns
@@ -98,7 +106,8 @@ RVTEST_CODE_BEGIN
     addi t0, t0, 1; \
 1:  addi t0, t0, -1; \
     bnez t0, 1b; \
-    vx_bar t1, 4; /* 2 warps each core */ \
+    li t6, 4; \
+    vx_bar t1, t6; /* 2 warps each core */ \
     MARK_LIVE_SPIN( alive, 200 ); \
     li t2, 0xffff; \
     addi t3, t1, -1; /* w0, 2: 0, w1, 3: ffffffff */ \
@@ -107,7 +116,8 @@ RVTEST_CODE_BEGIN
     bne x20, t2, fail; \
     CHECK_THREADS_WMASK( x20, 0, 32, alive, 0xfffe ) \
     bne x20, t2, fail; \
-    vx_bar zero, 4;
+    li t6, 4; \
+    vx_bar zero, t6;
   )
 
 

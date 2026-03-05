@@ -19,7 +19,8 @@ RVTEST_CODE_BEGIN
   addi t0, t0, 0x80300; /* i=200/400, d=300/500 */ \
   sw.shared x0, 0(t0); /* doesnt matter what we write */ \
   SPIN(500); \
-  vx_bar x0, 2; /* barrier 0 with two warps */
+  li t0, 2; \
+  vx_bar x0, t0; /* barrier 0 with two warps */
 
   // TODO: disable cluster 1
 
@@ -61,7 +62,8 @@ RVTEST_CODE_BEGIN
     bne t4, t3, fail; /* sanity: read own store */ \
     bne a4, x0, fail; /* other store should be zero */ \
     fence; \
-    vx_bar x0, 2; /* barrier 0 with two warps */
+    li t0, 2; \
+    vx_bar x0, t0; /* barrier 0 with two warps */
     lw a4, 0(a2); \
     bne a4, a3, fail; /* other core store should now appear */ \
   )
@@ -89,4 +91,3 @@ data2:
     .endr
 
 RVTEST_DATA_END
-
